@@ -1,7 +1,7 @@
 local 
 % Vous pouvez remplacer ce chemin par celui du dossier qui contient ProjectLib.ozf
 % Please replace this path with your own working directory that contains ProjectLib.ozf
-   Dossier = {Property.condGet cwdir '/home/max/Desktop/FSAB1402/Projet-2017/StudentPack'} % Unix example
+   Dossier = {Property.condGet cwdir '/Users/andres/Documents/University/SINF/SINF12BA/Quadrimestre 1/Informatique 2 (LFSAB1402)'} % Unix example
 % Dossier = {Property.condGet cwdir 'C:\\Users\\Thomas\\Documents\\U'} % Windows example.
    SnakeLib
 
@@ -30,7 +30,47 @@ in
    local
 % Déclarez vos functions ici
 % Declare your functions here
-      X
+
+%---------------------
+fun{DeleteTail SnakePositions}
+   case SnakePositions of H|T then
+      if T \= nil then H|{DeleteTail T}
+      else nil
+      end
+   else {Browse 'Snake n est pas de la bonne forme Snake'}
+   end
+   
+end
+%----------------------
+fun {AddHeadEast SnakePositions}
+   local X in
+      X = l(x:(SnakePositions.1.x)+1 y:SnakePositions.1.y to:east)
+      X|SnakePositions
+   end
+end
+%----------------------
+fun {AddHeadWest SnakePositions}
+   local X in
+      X = l(x:(SnakePositions.1.x)-1 y:SnakePositions.1.y to:west)
+      X|SnakePositions
+   end
+end
+%----------------------
+fun {AddHeadNorth SnakePositions}
+   local X in
+      X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)-1 to:north)
+      X|SnakePositions
+   end
+end
+%----------------------
+fun {AddHeadSouth SnakePositions}
+   local X in
+      X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)+1 to:south)
+      X|SnakePositions
+   end
+end
+
+
    in
 % La fonction qui renvoit les nouveaux attributs du serpent après prise
 % en compte des effets qui l'affectent et de son instruction
@@ -49,53 +89,72 @@ in
 %               effects: [grow|revert|teleport(x:<P> y:<P>)|... ...]
 %            )
       fun {Next Snake Instruction}
-
-	 	 ListPositions = Snake.3
-	 PositionTete = ListPositions.1
-	 PositionCou = ListPositions.2.1
+	 local PositionTete in
+	 PositionTete = Snake.positions.1
       
-	 if Instruction = turn(right) then
-	    if PositionTete.to == north then PositionTete.to = east && PositionTete.x = (PositionTete.x)+1
+	 if Instruction == turn(right) then
+	    if PositionTete.to == north then
 	       
-	       Snake.3.1=PositionTete.x %On Update La position de la tête
-	       Snake
-	    elseif PositionTete.to == east then PositionTete.to = south && PositionTete.y = (PositionTete.y)+1
-	       Snake.3.1=PositionTete.y %On Update La position de la tête
-	       Snake
-	    elseif PositionTete.to = south then PositionTete.to == west && PositionTete.x = (PositionTete.x)-1
-	       Snake.3.1=PositionTete.x %On Update La position de la tête
-	       Snake
-	    elseif PositionTete.to = west then PositionTete.to == north && PositionTete.y = (PositionTete.y)-1
-	       Snake.3.1=PositionTete.y %On Update La position de la tête
-	       Snake 
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadEast DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+		     
+	    elseif PositionTete.to == east then
+	       
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadSouth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	    elseif PositionTete.to == south then
+	       
+	        snake(team:Snake.team name:Snake.name positions:{AddHeadWest DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	 
+	    elseif PositionTete.to == west then
+
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadNorth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
 	    end
 	 end
 
-	 if Instruction = turn(left) then
-	    if PositionTete.to == north then PositionTete.to = west
-	       Snake
-	    elseif PositionTete.to == east then PositionTete.to = north
-	       Snake
-	    elseif PositionTete.to = south then PositionTete.to == east
-	       Snake
-	    elseif PositionTete.to = west then PositionTete.to == south
-	       Snake
+	 if Instruction == turn(left) then
+	    if PositionTete.to == north then
+
+	        snake(team:Snake.team name:Snake.name positions:{AddHeadWest DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	      
+	    elseif PositionTete.to == east then
+
+	        snake(team:Snake.team name:Snake.name positions:{AddHeadNorth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	    elseif PositionTete.to == south then
+
+	        snake(team:Snake.team name:Snake.name positions:{AddHeadEast DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	    elseif PositionTete.to == west then
+
+	        snake(team:Snake.team name:Snake.name positions:{AddHeadSouth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+
 	    end
 	 end
       
-	 if Instruction = forward then
-	    if PositionTete.to == north then PositionTete.y = (PositionTete.y)-1
-	       Snake
-	    elseif PositionTete.to == east then PositionTete.x = (PositionTete.x)+1
-	       Snake
-	    elseif PositionTete.to = south then PositionTete.y = (PositionTete.y)+1
-	       Snake
-	    elseif PositionTete.to = west then PositionTete.x = (PositionTete.x)-1
-	       Snake
+	 if Instruction == forward then
+	    if PositionTete.to == north then
+
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadNorth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	    elseif PositionTete.to == east then
+
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadEast DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	      
+	    elseif PositionTete.to == south then
+
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadSouth DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	   
+	    elseif PositionTete.to == west then
+
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadWest DeleteTail{Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
 	    end
 	 end
 	
+	 end
       end
+      
 
       
   
