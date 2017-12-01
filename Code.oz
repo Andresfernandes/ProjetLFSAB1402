@@ -1,7 +1,7 @@
 local 
 % Vous pouvez remplacer ce chemin par celui du dossier qui contient ProjectLib.ozf
 % Please replace this path with your own working directory that contains ProjectLib.ozf
-   Dossier = {Property.condGet cwdir '/Users/andres/Documents/University/SINF/SINF12BA/Quadrimestre 1/Informatique 2 (LFSAB1402)'} % Unix example
+   Dossier = {Property.condGet cwdir '/Users/andres/Documents/University/SINF/SINF12BA/Quadrimestre 1/Informatique 2 (LFSAB1402)/Projet 2017'} % Unix example
 % Dossier = {Property.condGet cwdir 'C:\\Users\\Thomas\\Documents\\U'} % Windows example.
    SnakeLib
 
@@ -90,14 +90,13 @@ in
 	       
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	 
-	       elseif PositionTete.to == west then
+	       else
 
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	       
 	       end
-	    end
 
-	    if Instruction == turn(left) then
+	    elseif Instruction == turn(left) then
 	    
 	       if PositionTete.to == north then
 
@@ -111,14 +110,13 @@ in
 
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	       
-	       elseif PositionTete.to == west then
+	       else
 
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 
 	       end
-	    end
       
-	    if Instruction == forward then
+	    else
 	    
 	       if PositionTete.to == north then
 
@@ -132,15 +130,15 @@ in
 
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	   
-	       elseif PositionTete.to == west then
+	       else 
 
 		  snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	       
 	       end
-	    end
 	
 	 end
-      end
+	 end
+	 end
       
       fun {DecodeStrategy Strategy}
 	 
