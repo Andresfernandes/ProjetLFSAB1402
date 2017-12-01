@@ -136,17 +136,20 @@ in
 	       
 	       end
 	
+	    end
 	 end
-	 end
-	 end
-      
-      fun {DecodeStrategy Strategy}
-	 
-	 [fun{$ Snake}
-	     Snake
+      end
 
-	     
-	  end]
+      %----------------------------------------
+      fun {DecodeStrategy Strategy}
+	 local Snake in
+	    case Strategy
+	 of H|T then
+	    {Next Snake H}
+	    {DecodeStrategy T}
+	 [] nil then nil
+	    end
+	    end
       end
 
 % Options
@@ -159,7 +162,7 @@ in
 		   debug: true
 % Instants par seconde, 0 spécifie une exécution pas à pas. (appuyer sur 'Espace' fait avancer le jeu d'un pas)
 % Steps per second, 0 for step by step. (press 'Space' to go one step further)
-		   frameRate: 1)
+		   frameRate: 0)
    end
 
 %%%%%%%%%%%
