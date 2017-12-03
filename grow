@@ -1,0 +1,30 @@
+declare
+
+Snake = [snake(x:4 y:2) snake(x:3 y:2) snake(x:2 y:2)]
+
+fun {AddHead L}
+   local X in
+      X = snake(x:(L.1.x + 1) y:L.1.y)
+      X|L
+   end
+end
+
+
+fun {Grow L}
+   local X=snake(x:4 y:2) in
+      case L of H|T then
+	 if H==X then
+	  %  if H==north.... {AddHeadNorth L}
+	  % elseif
+	  % elseif
+	  %  else
+	                
+	 else nil end
+      else nil
+      end
+   end
+end
+
+{Browse {Grow Snake}}
+
+  
