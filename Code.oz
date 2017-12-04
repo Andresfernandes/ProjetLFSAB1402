@@ -30,145 +30,176 @@ in
    local
 % Déclarez vos functions ici
 % Declare your functions here
+      
+%--------------------
+fun {RepeatedInstructions List Times}
+   if Times < 1 then nil
+   else List.1|{RepeatedInstructions List Times-1}
+   end 
+end
+%-----------------------%
+fun {DecomposeStrategy L}
+   local
+      fun {DecomposeStrategyAux A End}
+	 % @pre End est une liste sans liste impriquée
+	 % @post Renvoie la concaténation de {Flatten A} et de End
+	 case A
+	 of nil then End
+	 [] H|T then {DecomposeStrategyAux H {DecomposeStrategyAux T End}}
+	 else A|End
+	 end
+      end
+   in
+      {DecomposeStrategyAux L nil}
+   end
+end
+%-----------------------%
+fun {SimplifyStrategy Strategy}
+   case Strategy
+   of H|T then
+      case H
+      of repeat(L times:X) then
+	 {RepeatedInstructions L X}|{SimplifyStrategy T}
+      [] L then H|{SimplifyStrategy T}
+      end
+   [] nil then nil
+   end
+end
 
 %---------------------
-      fun{DeleteTail SnakePositions}
-	 case SnakePositions of H|T then
-	    if T \= nil then H|{DeleteTail T}
-	    else nil
-	    end
-	 else nil
-	 end
+fun{DeleteTail SnakePositions}
+   case SnakePositions of H|T then
+      if T \= nil then H|{DeleteTail T}
+      else nil
+      end
+   else nil
+   end
    
-      end
+end
 %----------------------
-      fun {AddHeadEast SnakePositions}
-	 local X in
-	    X = l(x:(SnakePositions.1.x)+1 y:SnakePositions.1.y to:east)
-	    X|SnakePositions
-	 end
-      end
+fun {AddHeadEast SnakePositions}
+   local X in
+      X = l(x:(SnakePositions.1.x)+1 y:SnakePositions.1.y to:east)
+      X|SnakePositions
+   end
+end
 %----------------------
-      fun {AddHeadWest SnakePositions}
-	 local X in
-	    X = l(x:(SnakePositions.1.x)-1 y:SnakePositions.1.y to:west)
-	    X|SnakePositions
-	 end
-      end
+fun {AddHeadWest SnakePositions}
+   local X in
+      X = l(x:(SnakePositions.1.x)-1 y:SnakePositions.1.y to:west)
+      X|SnakePositions
+   end
+end
 %----------------------
-      fun {AddHeadNorth SnakePositions}
-	 local X in
-	    X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)-1 to:north)
-	    X|SnakePositions
-	 end
-      end
+fun {AddHeadNorth SnakePositions}
+   local X in
+      X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)-1 to:north)
+      X|SnakePositions
+   end
+end
 %----------------------
-      fun {AddHeadSouth SnakePositions}
-	 local X in
-	    X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)+1 to:south)
-	    X|SnakePositions
-	 end
-      end
-
-
-   in
-      fun {Next Snake Instruction}
-	 local PositionTete in
-	    PositionTete = Snake.positions.1
+fun {AddHeadSouth SnakePositions}
+   local X in
+      X = l(x:SnakePositions.1.x y:(SnakePositions.1.y)+1 to:south)
+      X|SnakePositions
+   end
+end
+%----------------------
+in
+fun {Next Snake Instruction}
+   local PositionTete in
+      PositionTete = Snake.positions.1
       
-	    if Instruction == turn(right) then
+      if Instruction == turn(right) then
 
-	       if PositionTete.to == north then
+	 if PositionTete.to == north then
 	       
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 		     
-	       elseif PositionTete.to == east then
+	 elseif PositionTete.to == east then
 	       
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	       
-	       elseif PositionTete.to == south then
+	 elseif PositionTete.to == south then
 	       
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	 
-	       else
+	 else
 
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 	       
-	       end
-
-	    elseif Instruction == turn(left) then
-	    
-	       if PositionTete.to == north then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	      
-	       elseif PositionTete.to == east then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	       
-	       elseif PositionTete.to == south then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	       
-	       else
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-
-	       end
-      
-	    else
-	    
-	       if PositionTete.to == north then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	       
-	       elseif PositionTete.to == east then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	      
-	       elseif PositionTete.to == south then
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	   
-	       else 
-
-		  snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
-	       
-	       end
-	
-	    end
 	 end
-      end
 
-      %----------------------------------------
-      fun {DecodeStrategy Strategy}
-	 local Snake in
-	    case Strategy
-	 of H|T then
-	    {Next Snake H}
-	    {DecodeStrategy T}
-	 [] nil then nil
-	    end
-	    end
-      end
+      elseif Instruction == turn(left) then
+	    
+	 if PositionTete.to == north then
 
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	      
+	 elseif PositionTete.to == east then
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	 elseif PositionTete.to == south then
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	 else
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+
+	 end
+      
+      else
+	    
+	 if PositionTete.to == north then
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadNorth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	 elseif PositionTete.to == east then
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	      
+	 elseif PositionTete.to == south then
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	   
+	 else 
+
+	    snake(team:Snake.team name:Snake.name positions:{AddHeadWest {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       
+	 end
+	
+      end
+   end
+end
+%----------------------------------------%
+fun {DecodeStrategy Strategy}
+   local StrategyList in
+      StrategyList = {DecomposeStrategy {SimplifyStrategy Strategy}}
+      case StrategyList
+      of nil then nil 
+      [] H|T then (fun{$ Snake}{Next Snake H}end)|{DecodeStrategy T}
+      end
+   end
+end
 % Options
-      Options = options(
+Options = options(
 % Fichier contenant le scénario (depuis Dossier)
 % Path of the scenario (relative to Dossier)
-		   scenario:'scenario_test_moves.oz'
+	     scenario:'scenario_test_moves.oz'
 % Visualisation de la partie
 % Graphical mode
-		   debug: true
+	     debug: true
 % Instants par seconde, 0 spécifie une exécution pas à pas. (appuyer sur 'Espace' fait avancer le jeu d'un pas)
 % Steps per second, 0 for step by step. (press 'Space' to go one step further)
-		   frameRate: 0)
-   end
+	     frameRate: 0)
+end
 
 %%%%%%%%%%%
 % The end %
 %%%%%%%%%%%
-   local R = {SnakeLib.play Dossier#'/'#Options.scenario Next DecodeStrategy Options} in
-      {Browse R}
-   end
+local R = {SnakeLib.play Dossier#'/'#Options.scenario Next DecodeStrategy Options} in
+   {Browse R}
+end
 end
