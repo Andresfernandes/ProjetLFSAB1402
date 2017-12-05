@@ -181,13 +181,14 @@ in
 %----------------------
    in
       fun {Next Snake Instruction}
+
+	 if Snake.effects == grow then
+	    snake(team:Snake.team name:Snake.name positions:{Grow Snake.positions} effects:nil strategy:Snake.strategy bombing:Snake.bombing)
              %----
-	 if {RightInstruction Instruction} then
+	 elseif {RightInstruction Instruction} then
 	 
 	    if {HeadNorth Snake.positions.1.to} then
-	       snake(team:Snake.team name:Snake.name positions:%{AddHeadEast {DeleteTail Snake.positions}}
-		     {Grow Snake.positions} %!!!!!!! GROW TEST
-		     effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
+	       snake(team:Snake.team name:Snake.name positions:{AddHeadEast {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
 		     
 	    elseif {HeadEast Snake.positions.1.to} then
 	       snake(team:Snake.team name:Snake.name positions:{AddHeadSouth {DeleteTail Snake.positions}} effects:Snake.effects strategy:Snake.strategy bombing:Snake.bombing)
