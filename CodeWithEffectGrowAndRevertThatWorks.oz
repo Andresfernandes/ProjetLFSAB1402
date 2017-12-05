@@ -5,7 +5,7 @@ local
  Dossier = {Property.condGet cwdir 'C:\\Users\\Karolina\\Desktop\\Q3\\INFO 2\\ProjetInfo'} % Windows example.
    SnakeLib
 
-% Les deux fonctions que vous devez implémenter
+% Les deux fonctions que vous devez implÃ©menter
 % The two function you have to implement
    Next
    DecodeStrategy
@@ -28,7 +28,7 @@ in
 %%%%%%%%%%%%%%%%%%%%%%%%
 
    local
-% Déclarez vos functions ici
+% DÃ©clarez vos functions ici
 % Declare your functions here
 
       fun {Grow SnakePositions} %WORKING
@@ -70,8 +70,20 @@ in
 	 {RevertAcc SnakePositions nil}
       end
 %--------------------
-
-      
+		fun{Teleport SnakePositions Xtarget Ytarget} %Xtarget/Ytarget se recuperent de l'effet teleport avec Snake.effects.x ou .y
+	 fun {TeleportAcc SnakePositions Xtarget Ytarget Resultat}
+	    case SnakePositions of nil then Resultat
+	    [] H|T then
+	       if H.to == north then {TeleportAcc T Xtarget Ytarget pos(x:Xtarget y:H.Ytarget-1 to:H.to)|Resultat}
+	       elseif H.to == south then {TeleportAcc T Xtarget Ytarget pos(x:Xtarget y:H.Ytarget+1 to:H.to)|Resultat}
+	       elseif H.to == east then {TeleportAcc T Xtarget Ytarget pos(x:Xtarget+1 y:H.Ytarget to:H.to)|Resultat}
+	       else {TeleportAcc T Xtarget Ytarget pos(x:Xtarget-1 y:H.Ytarget to:H.to)|Resultat}
+	       end
+	    end
+	 end
+      in
+	 {TeleportAcc SnakePositions Xtarget Ytarget nil}
+      end
 %--------------------
       fun {RepeatedInstructions List Times}
 	 if Times < 1 then nil
@@ -250,13 +262,13 @@ in
       end
 % Options
       Options = options(
-% Fichier contenant le scénario (depuis Dossier)
+% Fichier contenant le scÃ©nario (depuis Dossier)
 % Path of the scenario (relative to Dossier)
 		   scenario:'scenario_test_grow.oz'
 % Visualisation de la partie
 % Graphical mode
 		   debug: true
-% Instants par seconde, 0 spécifie une exécution pas à pas. (appuyer sur 'Espace' fait avancer le jeu d'un pas)
+% Instants par seconde, 0 spÃ©cifie une exÃ©cution pas Ã  pas. (appuyer sur 'Espace' fait avancer le jeu d'un pas)
 % Steps per second, 0 for step by step. (press 'Space' to go one step further)
 		   frameRate: 0)
    end
